@@ -9,7 +9,7 @@ License is based on Creative Commons: Attribution-NonCommercial 4.0 Internationa
 import matplotlib.pyplot as plt
 import networkx as nx
 
-def visibilityPRMVisualize(planner, solution, ax = None, nodeSize = 300):
+def visibilityPRMVisualize(planner, solution, ax = None, nodeSize = 200):
     # get a list of positions of all nodes by returning the content of the attribute 'pos'
     graph = planner.graph
     statsHandler = planner.statsHandler
@@ -28,11 +28,11 @@ def visibilityPRMVisualize(planner, solution, ax = None, nodeSize = 300):
 
     collChecker.drawObstacles(ax)
     
-    if statsHandler:
-        statPos_3d = nx.get_node_attributes(statsHandler.graph,'pos')
-        statPos = {node: (coords[0], coords[1]) for node, coords in statPos_3d.items()}
-        nx.draw_networkx_nodes(statsHandler.graph, pos=statPos, alpha=0.2,node_size=nodeSize)
-        nx.draw_networkx_edges(statsHandler.graph, pos=statPos, alpha=0.2,edge_color='y')
+    # if statsHandler:
+        # statPos_3d = nx.get_node_attributes(statsHandler.graph,'pos')
+        # statPos = {node: (coords[0], coords[1]) for node, coords in statPos_3d.items()}
+        # nx.draw_networkx_nodes(statsHandler.graph, pos=statPos, alpha=0.2,node_size=nodeSize)
+        # nx.draw_networkx_edges(statsHandler.graph, pos=statPos, alpha=0.2,edge_color='y')
         
     # draw graph 
     nx.draw_networkx_nodes(graph, pos, ax = ax, nodelist=list(color.keys()), node_color=list(color.values()), node_size=nodeSize)

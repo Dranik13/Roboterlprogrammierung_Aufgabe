@@ -20,10 +20,11 @@ class CollisionChecker(object):
     def __init__(self, scene, limits=[[0.0, 22.0], [0.0, 22.0]], statistic=None):
         self.scene = scene
         self.limits = limits
+        self.dim = len(self.limits)
 
     def getDim(self):
         """ Return dimension of Environment (Shapely should currently always be 2)"""
-        return 2
+        return self.dim
 
     def getEnvironmentLimits(self):
         """ Return limits of Environment"""
