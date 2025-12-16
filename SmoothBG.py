@@ -59,8 +59,8 @@ class SmoothBG():
                         self.path_planer.graph.add_node("new_goal_node_" + str(self.added_nodes), pos = list(new_goal))
                         
                         self.path_planer.graph.add_edge(start_node_name, "new_start_node_" + str(self.added_nodes))
-                        self.path_planer.graph.add_edge("new_goal_node_" + str(self.added_nodes), goal_node_name)
                         self.path_planer.graph.add_edge("new_start_node_" + str(self.added_nodes), "new_goal_node_" + str(self.added_nodes))
+                        self.path_planer.graph.add_edge("new_goal_node_" + str(self.added_nodes), goal_node_name)
                         
                         
                         # remove skipped node
@@ -92,10 +92,18 @@ class SmoothBG():
         
         if clean_up:
             nodes = self.path_planer.graph.nodes()
+            to_remove = []
             for node in nodes:
-                if not node in collision_free_path:
-                    self.path_planer.graph.remove_node(node)
+                if not node in collision_free_path and type(node) == type(""):
+                    to_remove.append(node)
         
+            for node in to_remove:
+                self.path_planer.graph.remove_node(node)
+
+        # # create edges
+        # for i in range(1, len(collision_free_path)):
+        #     self.path_planer.graph.add_edge(collision_free_path[i-1], collision_free_path[i])
+
         return collision_free_path
                 
             
