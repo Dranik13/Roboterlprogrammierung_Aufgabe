@@ -1,8 +1,17 @@
 import numpy as np 
+import networkx as nx
+import matplotlib.pyplot as plt
+import matplotlib.animation
 
-class SmoothBG():
+from IPython.display import HTML, display
+
+from IPVISLazyPRM import visibilityPRMVisualizeWspace
+
+from SmootherBase import SmootherBase
+
+class SmoothBG(SmootherBase):
     def __init__(self):
-        pass
+        super().__init__()
     
     def smooth_path(self, path, planer, config, clean_up = False):
         '''        
@@ -20,7 +29,8 @@ class SmoothBG():
         self.config:dict = config
         
         corner_threshold:float = self.config["corner_threshold"]
-        max_new_node_in_cascade = self.config["max_new_nodes"]
+        epoches = self.config["epoches"]
+        epoche_counter = 0
         
         '''
         Run the skip process. Starting with first node till the last one
@@ -30,7 +40,11 @@ class SmoothBG():
         new_added_nodes_in_a_cascade = 0
       
         start_node_name = collision_free_path[id]
-        while start_node_name != collision_free_path[-1] and not id + 2 >= len(collision_free_path):
+        while start_node_name != collision_free_path[-1] and not id + 2 >= len(collision_free_path) and epoche_counter != epoches:
+            
+            self.path_per_epoche.append(list(collision_free_path))
+            epoche_counter += 1
+            
             goal_node_name = collision_free_path[id + 2]
             skip_node_name = collision_free_path[id + 1]
             
@@ -69,24 +83,25 @@ class SmoothBG():
                         
                         
                         self.added_nodes += 1  
-                        new_nodes_generated = True
+                        id += 1
                     else:
                         id += 1 # no skip possible
             else: 
                 id += 1 # no relevant edge to skip
                 
             
-            if new_nodes_generated:
-                new_added_nodes_in_a_cascade += 1
-                # skip next node in path (what is in that case a "new_start_node") and jump directly to the "new_goal_node"
-                if new_added_nodes_in_a_cascade == max_new_node_in_cascade:
-                    new_added_nodes_in_a_cascade = 0
-                    id += 1
+            # if new_nodes_generated:
+            #     new_added_nodes_in_a_cascade += 1
+            #     # skip next node in path (what is in that case a "new_start_node") and jump directly to the "new_goal_node"
+            #     if new_added_nodes_in_a_cascade == max_new_node_in_cascade:
+            #         new_added_nodes_in_a_cascade = 0
+            #         id += 1
                     
-            else:
-                new_added_nodes_in_a_cascade = 0
+            # else:
+            #     new_added_nodes_in_a_cascade = 0
             
             start_node_name = collision_free_path[id]
+            
             
             
         
@@ -104,6 +119,8 @@ class SmoothBG():
         # for i in range(1, len(collision_free_path)):
         #     self.path_planer.graph.add_edge(collision_free_path[i-1], collision_free_path[i])
 
+
+        self.smoothed_path = collision_free_path
         return collision_free_path
                 
             
@@ -144,3 +161,47 @@ class SmoothBG():
             
             start = new_start_node
             goal = new_goal_node
+
+    # def visualize_smoothing(self, environment):
+    #     figure = plt.figure(figsize=(7, 7))
+    
+    #     ax = figure.add_subplot(1, 1, 1)
+        
+        
+    #     workSpaceLimits = environment.robot.getLimits()
+                
+    #     def animation(frame):
+    #         ## clear taks space figure
+    #         ax.cla()
+    #         ## fix figure size
+    #         ax.set_title("Path smoothing BG", fontsize=14)
+    #         ax.set_xlim(workSpaceLimits[0])
+    #         ax.set_ylim(workSpaceLimits[1])
+    #         ## draw obstacles
+    #         environment.drawObstacles(ax)
+    #         ## update robot position
+
+    #         graph = nx.Graph()
+    #         for node in self.path_per_epoche[frame]:
+    #             graph.add_node(node, pos = self.path_planer.graph.nodes[node]["pos"])
+            
+            
+    #         for i in range(len(self.path_per_epoche[frame]) - 1):
+    #             graph.add_edge(self.path_per_epoche[frame][i], self.path_per_epoche[frame][i + 1])
+
+    #         pos = nx.get_node_attributes(graph,'pos')
+    #         # todo extract from pos the first two dimensions only for drawing in workspace
+    #         pos2D = dict()
+    #         for key in pos.keys():
+    #             pos2D[key] = (pos[key][0], pos[key][1])
+                
+    #         pos = pos2D
+
+    #         nx.draw_networkx_nodes(graph, pos,  cmap=plt.cm.Blues, ax = ax, node_size=100)
+    #         nx.draw_networkx_edges(graph,pos, ax = ax)
+        
+    #     ani = matplotlib.animation.FuncAnimation(figure, animation, frames=len(self.path_per_epoche))
+    #     html = HTML(ani.to_jshtml())
+    #     display(html)
+    #     plt.close()
+                    
