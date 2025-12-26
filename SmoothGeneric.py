@@ -3,6 +3,7 @@ import numpy as np
 import networkx as nx
 import copy
 from SmootherBase import SmootherBase
+import time
 
 class SmoothGeneric(SmootherBase):
     def __init__(self, planner, path):
@@ -88,6 +89,7 @@ class SmoothGeneric(SmootherBase):
 
         return True
     def smooth_path(self):
+        start_time = time.time()
         for i in range(50):
             # print(i)
             a = True
@@ -95,5 +97,5 @@ class SmoothGeneric(SmootherBase):
                 if self.findRandomShortcut():
                     self.path_per_epoche.append(list(self.smoothed_path))
                     break
-
+        self.smoothing_time = time.time() - start_time
         return self.smoothed_path, self.path_planner.graph

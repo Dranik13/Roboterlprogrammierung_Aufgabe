@@ -13,8 +13,9 @@ from SmootherBase import SmootherBase,Angle
 import IPEnvironment 
 import IPEnvironmentKin
 import IPEnvironmentShapeRobot
-
+import time
 from math import *
+import copy
 
 class SmoothBG(SmootherBase):
     def __init__(self):
@@ -33,7 +34,7 @@ class SmoothBG(SmootherBase):
             return []
         
         collision_free_path:list = list(path)
-        self.path_planner = planner
+        self.path_planner = copy.deepcopy(planner)
         self.config:dict = config
         
         corner_threshold:float = self.config["corner_threshold"]
@@ -49,7 +50,7 @@ class SmoothBG(SmootherBase):
         skip_possible = True
         
         not_smooth_able_pairs = []
-        
+        start_time = time.time()
         while max_corner >= corner_threshold and epoche_counter != epoches and skip_possible == True:
             
             self.path_per_epoche.append(list(collision_free_path))
@@ -144,7 +145,7 @@ class SmoothBG(SmootherBase):
                 skip_possible = False
             
             
-            
+        self.smoothing_time = time.time() - start_time    
             
         
         if clean_up:
@@ -159,7 +160,8 @@ class SmoothBG(SmootherBase):
 
 
         self.smoothed_path = collision_free_path
-        return collision_free_path
+
+        return collision_free_path, self.path_planner.graph
                 
             
                     

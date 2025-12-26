@@ -97,6 +97,8 @@ class SmootherBase():
         
         self.config = {}
         self.path_per_epoche = []
+
+        self.smoothing_time = 0
     
     def visualize_smoothing(self, seconds_per_frame=0.1, title="Path smoothing BG"):
         if self.smoothed_path == []:

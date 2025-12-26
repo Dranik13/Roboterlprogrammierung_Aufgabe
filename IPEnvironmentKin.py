@@ -139,6 +139,7 @@ def animateSolution(planner, graph, environment, solution, visualizer, workSpace
         plt.close()
     else:
         fig_local = plt.figure(figsize=(7, 7))
+        fig_local.suptitle(title, fontsize=16)
         ax1 = fig_local.add_subplot(1, 1, 1)
         ## get positions for solution
         solution_pos = [_graph.nodes[node]['pos'] for node in _solution]
