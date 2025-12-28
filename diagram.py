@@ -148,8 +148,8 @@ def generate_timeplot(resultList):
             ax_right.plot(sm_lengths, marker='x', label="Generic Smoother")
 
             ax_right.set_xlabel("Iteration")
-            ax_right.set_ylabel("Anzahl der Knoten")
-            ax_right.set_title("Pfadlänge (Knotenanzahl)")
+            ax_right.set_ylabel("Number of knots")
+            ax_right.set_title("Pathlength (number of knots)")
             ax_right.grid(True)
             ax_right.legend()
 

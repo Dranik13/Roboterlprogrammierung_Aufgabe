@@ -256,7 +256,7 @@ class SmootherBase():
                     origin_limits, smoothed_limits, origin_path, smoothed_path):
             # linke Figur: original
             ax_left.cla()
-            ax_left.set_title("original_path", fontsize=14)
+            ax_left.set_title("Original path", fontsize=14)
             ax_left.set_xlim(origin_limits[0])
             ax_left.set_ylim(origin_limits[1])
             ax_left.set_aspect('equal', adjustable='box')

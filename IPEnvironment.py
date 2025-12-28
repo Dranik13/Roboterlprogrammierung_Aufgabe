@@ -77,7 +77,7 @@ class CollisionChecker(object):
         return False
 
     @IPPerfMonitor
-    def lineInCollision(self, startPos, endPos):
+    def lineInCollision(self, startPos, endPos, collisition_intervals=40):
         """ Check whether a line from startPos to endPos is colliding"""
         assert (len(startPos) == self.getDim())
         assert (len(endPos) == self.getDim())
@@ -85,10 +85,9 @@ class CollisionChecker(object):
         p1 = np.array(startPos)
         p2 = np.array(endPos)
         p12 = p2-p1
-        k = 40
         #print("testing")
-        for i in range(k):
-            testPoint = p1 + (i+1)/k*p12
+        for i in range(collisition_intervals):
+            testPoint = p1 + (i+1)/collisition_intervals*p12
             if self.robot_poly != None:
                 if self.polyInCollision(testPoint)==True:
                     return True

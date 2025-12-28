@@ -50,7 +50,7 @@ class SmoothGeneric(SmootherBase):
             if(u > v):
                 u, v = v, u
             
-            shortcut_collides = self.path_planner._collisionChecker.lineInCollision(points[u], points[v])
+            shortcut_collides = self.path_planner._collisionChecker.lineInCollision(points[u], points[v], self.config["collision_intervals"])
             
             if not shortcut_collides:
                 self.insertAndConnectPointsOnEdges(points, u, v)
@@ -88,10 +88,10 @@ class SmoothGeneric(SmootherBase):
         self.id_counter += 2
 
         return True
-    def smooth_path(self):
+    def smooth_path(self, config):
+        self.config:dict = config
         start_time = time.time()
-        for i in range(50):
-            # print(i)
+        for i in range(self.config["epoches"]):
             a = True
             while a:
                 if self.findRandomShortcut():
