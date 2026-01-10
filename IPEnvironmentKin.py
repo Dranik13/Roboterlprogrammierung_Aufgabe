@@ -13,19 +13,17 @@ from shapely import plotting
 import numpy as np
 import copy
 
-def interpolate_line(startPos, endPos, step_l):
-    steps = []
-    line = np.array(endPos) - np.array(startPos)
-    line_l = np.linalg.norm(line)
-    step = line / line_l * step_l
-    n_steps = np.floor(line_l / step_l).astype(np.int32)
-    c_step = np.array(startPos)
-    for i in range(n_steps):
-        steps.append(copy.deepcopy(c_step))
-        c_step += step
-    if not (c_step == np.array(endPos)).all():
-        steps.append(np.array(endPos))
-    return steps
+def interpolate_line(startPos, endPos, n_points):
+    """
+    Interpolate a straight line from startPos to endPos into exactly n_points samples.
+    The returned list includes both start and end. If n_points <= 1, returns [startPos].
+    """
+    start = np.array(startPos, dtype=float)
+    end = np.array(endPos, dtype=float)
+    if n_points <= 1:
+        return [start]
+    t = np.linspace(0.0, 1.0, n_points)
+    return [np.array(start + (end - start) * float(tt)) for tt in t]
 
 
 class KinChainCollisionChecker(CollisionChecker):
@@ -36,6 +34,7 @@ class KinChainCollisionChecker(CollisionChecker):
         self.kin_chain = kin_chain
         self.fk_resolution = fk_resolution
         self.dim = self.kin_chain.dim
+        self.collision_intervals = 0
 
     def getDim(self):
         return self.dim
@@ -48,10 +47,18 @@ class KinChainCollisionChecker(CollisionChecker):
                 return True
         return False
     
-    def lineInCollision(self, startPos, endPos, collisition_intervals=40):
+    def lineInCollision(self, startPos, endPos, collision_intervals=40):
         assert (len(startPos) == self.getDim())
         assert (len(endPos) == self.getDim())
-        steps = interpolate_line(startPos, endPos, self.fk_resolution)
+
+        if self.collision_intervals == 0:
+            self.collision_intervals = collision_intervals
+
+        # compute number of samples so that spacing is approximately self.fk_resolution
+        line = np.array(endPos) - np.array(startPos)
+        line_l = np.linalg.norm(line)
+        n_points = max(2, int(np.floor(line_l / self.fk_resolution)) + 1)
+        steps = interpolate_line(startPos, endPos, collision_intervals)
         for pos in steps:
             if self.pointInCollision(pos):
                 return True
@@ -89,6 +96,8 @@ def animateSolution(planner, graph, environment, solution, visualizer, workSpace
     _environment = environment
     _solution = solution
     _prmVisualizer = visualizer
+    _prmVisualizer.graph = _graph
+    _planner.graph = _graph
     
     if _environment.getDim() == 2:
     
@@ -105,7 +114,9 @@ def animateSolution(planner, graph, environment, solution, visualizer, workSpace
         for i in range(1, len(solution_pos)):
             segment_s = solution_pos[i-1]
             segment_e = solution_pos[i]
-            i_solution_pos = i_solution_pos + interpolate_line(segment_s, segment_e, 0.1)[1:]
+            segment_len = np.linalg.norm(np.array(segment_e) - np.array(segment_s))
+            n_points = max(2, int(np.floor(segment_len / 0.1)) + 1)
+            i_solution_pos = i_solution_pos + interpolate_line(segment_s, segment_e, n_points)[1:]
         ## animate
         frames = len(i_solution_pos)
         
@@ -148,7 +159,9 @@ def animateSolution(planner, graph, environment, solution, visualizer, workSpace
         for i in range(1, len(solution_pos)):
             segment_s = solution_pos[i-1]
             segment_e = solution_pos[i]
-            i_solution_pos = i_solution_pos + interpolate_line(segment_s, segment_e, 0.1)[1:]
+            segment_len = np.linalg.norm(np.array(segment_e) - np.array(segment_s))
+            n_points = max(2, int(np.floor(segment_len / 0.1)) + 1)
+            i_solution_pos = i_solution_pos + interpolate_line(segment_s, segment_e, n_points)[1:]
         ## animate
         frames = len(i_solution_pos)
         

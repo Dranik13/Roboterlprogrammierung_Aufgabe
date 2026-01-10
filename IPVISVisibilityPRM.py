@@ -35,7 +35,7 @@ def visibilityPRMVisualize(planner, solution, ax = None, nodeSize = 200):
         # nx.draw_networkx_edges(statsHandler.graph, pos=statPos, alpha=0.2,edge_color='y')
         
     # draw graph 
-    nx.draw_networkx_nodes(graph, pos, ax = ax, nodelist=list(color.keys()), node_color=list(color.values()), node_size=nodeSize)
+    # nx.draw_networkx_nodes(graph, pos, ax = ax, nodelist=list(color.keys()), node_color=list(color.values()), node_size=nodeSize)
     nx.draw_networkx_edges(graph, pos, ax = ax)
     
     Gcc = sorted(nx.connected_components(graph), key=len, reverse=True)

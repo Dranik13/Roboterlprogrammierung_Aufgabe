@@ -34,7 +34,7 @@ def lazyPRMVisualize(planner, solution = [] , ax=None, nodeSize = 300):
     #degree = nx.degree_centrality(graph)
     
     # draw graph
-    nx.draw_networkx_nodes(graph, pos, ax = ax, nodelist=list(color.keys()), node_color=list(color.values()), node_size=nodeSize)
+    # nx.draw_networkx_nodes(graph, pos, ax = ax, nodelist=list(color.keys()), node_color=list(color.values()), node_size=nodeSize)
     nx.draw_networkx_edges(graph, pos, ax = ax)
 
 
