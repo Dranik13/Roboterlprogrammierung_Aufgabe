@@ -17,14 +17,22 @@ import numpy as np
 
 benchList = list()
 r = PlanarRobot(n_joints=2)
-start_joint_pos = [2.0, 0.5]
-end_joint_pos = [-2.0, -0.5]
+# start_joint_pos = [2.0, 0.5]
+# end_joint_pos = [-2.0, -0.5]
 
 # -----------------------------------------
 obst = dict()
-obst["obs1"] = LineString([(-2, 0), (-0.8, 0)]).buffer(0.5)
-obst["obs2"] = LineString([(2, 0), (2, 1)]).buffer(0.2)
-obst["obs3"] = LineString([(-1, 2), (1, 2)]).buffer(0.1)
+# obst["obs1"] = LineString([(-2, 0), (-0.8, 0)]).buffer(0.5)
+# obst["obs2"] = LineString([(2, 0), (2, 1)]).buffer(0.2)
+# obst["obs3"] = LineString([(-1, 2), (1, 2)]).buffer(0.1)
+# description = "Following the direct connection from goal to start would lead the algorithm into a trap."
+# benchList.append(Benchmark("Kin_Obst", KinChainCollisionChecker(r, obst,fk_resolution=.2), [start_joint_pos], [end_joint_pos], description, 2))
+
+# ---------- NEUER TEST ----------------
+start_joint_pos = [2.3, -0.0]
+end_joint_pos = [1, 0]
+obst["obs1"] = LineString([(0, 3), (0, 10)]).buffer(1.5)
+
 description = "Following the direct connection from goal to start would lead the algorithm into a trap."
 benchList.append(Benchmark("Kin_Obst", KinChainCollisionChecker(r, obst,fk_resolution=.2), [start_joint_pos], [end_joint_pos], description, 2))
 
