@@ -90,7 +90,7 @@ import matplotlib.animation
 from IPython.display import HTML
 
 matplotlib.rcParams['animation.embed_limit'] = 64
-def animateSolution(planner, graph, environment, solution, visualizer, workSpaceLimits=[[-3,3],[-3,3]], title="Planned Path"):
+def animateSolution(planner, graph, environment, solution, visualizer, workSpaceLimits=[[-5,5],[-5,5]], title="Planned Path"):
     _planner = planner
     _graph = graph
     _environment = environment

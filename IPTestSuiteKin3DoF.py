@@ -30,7 +30,7 @@ obst = dict()
 # ---------- NEUER TEST ----------------
 start_joint_pos = [2.3, 0, 0]
 end_joint_pos = [0.7, 0.3, 0.1]
-obst["obs1"] = LineString([(0, 4), (0, 10)]).buffer(2.5)
+obst["obs1"] = LineString([(0, 4.2), (0, 10)]).buffer(2.5)
 
 description = "Following the direct connection from goal to start would lead the algorithm into a trap."
 benchList.append(Benchmark("Kin_Obst", KinChainCollisionChecker(r, obst,limits=limits, fk_resolution=.2), [start_joint_pos], [end_joint_pos], description, 2))
