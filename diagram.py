@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pylab as plt
 from shapely.geometry import Point, Polygon, LineString
+from matplotlib.ticker import MaxNLocator
 
 def generate_diagramm(testList, resultList):
     for bench in testList:
@@ -43,7 +44,7 @@ def generate_diagramm(testList, resultList):
 
 
         fig, (ax1, ax2, ax3) = plt.subplots(3, 1, sharex=True, figsize=(12, 8))
-        fig.suptitle(f"{result.benchmark.name}")
+        fig.suptitle(f"{title}")
 
         labels = list(pathLength.keys())
 
@@ -108,12 +109,14 @@ def generate_diagramm(testList, resultList):
 
         plt.tight_layout()
         plt.show()
+        plt.close()
 
 def path_length_from_nodes(path, graph):
     coords = [(graph.nodes[n]['pos'][0], graph.nodes[n]['pos'][1]) for n in path]
     return LineString(coords).length
 
 def generate_timeplot(resultList):
+    
     for result in resultList:
         if result.solution != []:
             G_BG = result.smooth_graph_bg
@@ -150,6 +153,7 @@ def generate_timeplot(resultList):
             ax_right.set_xlabel("Iteration")
             ax_right.set_ylabel("Number of knots")
             ax_right.set_title("Pathlength (number of knots)")
+            ax_right.yaxis.set_major_locator(MaxNLocator(integer=True))
             ax_right.grid(True)
             ax_right.legend()
 
@@ -161,3 +165,4 @@ def generate_timeplot(resultList):
 
             plt.tight_layout()
             plt.show()
+            plt.close()

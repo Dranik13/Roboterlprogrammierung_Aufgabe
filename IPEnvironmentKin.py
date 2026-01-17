@@ -77,12 +77,12 @@ class KinChainCollisionChecker(CollisionChecker):
 
 
 
-def planarRobotVisualize(kin_chain, ax):
+def planarRobotVisualize(kin_chain, ax, color = 'g'):
     joint_positions = kin_chain.get_transforms()
     for i in range(1, len(joint_positions)):
         xs = [joint_positions[i-1][0], joint_positions[i][0]]
         ys = [joint_positions[i-1][1], joint_positions[i][1]]
-        ax.plot(xs, ys, color='g')
+        ax.plot(xs, ys, color=color)
         
   
 import matplotlib.pyplot as plt              
@@ -90,7 +90,7 @@ import matplotlib.animation
 from IPython.display import HTML
 
 matplotlib.rcParams['animation.embed_limit'] = 64
-def animateSolution(planner, graph, environment, solution, visualizer, workSpaceLimits=[[-5,5],[-5,5]], title="Planned Path"):
+def animateSolution(planner, graph, environment, solution, visualizer, workSpaceLimits=[[-4,4],[-4,4]], title="Planned Path"):
     _planner = planner
     _graph = graph
     _environment = environment

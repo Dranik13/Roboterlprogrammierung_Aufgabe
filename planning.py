@@ -3,6 +3,7 @@ import ResultCollection
 resultList = list()
 
 def planning(plannerFactory, testList):
+    resultList = list()
     for key,producer in list(plannerFactory.items()):
         print(key, producer)
         for benchmark in testList:
@@ -17,6 +18,8 @@ def planning(plannerFactory, testList):
                                             IPPerfMonitor.dataFrame()
                                             ),
                             )
+                if(resultList[-1].solution == []):
+                    print(f"no path found {resultList[-1].plannerFactoryName} {benchmark.name}")
             except Exception as e:
                 print ("PLANNING ERROR ! ", e)
                 pass

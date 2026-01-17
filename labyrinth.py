@@ -3,7 +3,7 @@ import shapely
 
 
 
-def generate(walk_way = 1.5, x_start = 3, y_start = 1, length = 11, height = 7, thickness = 0.3):
+def generate(walk_way = 3, x_start = 3, y_start = 1, length = 17, height = 18, thickness = 0.3):
     point_list = [(x_start, y_start)]
     
     
